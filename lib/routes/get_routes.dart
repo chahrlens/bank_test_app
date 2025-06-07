@@ -1,4 +1,5 @@
 import 'package:bank_test_app/routes/router_paths.dart';
+import 'package:bank_test_app/views/dashboard/pages/dashboard_page.dart';
 import 'package:bank_test_app/views/home/pages/home_page.dart';
 import 'package:bank_test_app/views/home/pages/login_page.dart';
 import 'package:bank_test_app/views/home/pages/register_page.dart';
@@ -9,5 +10,6 @@ class GetRoutes {
     GetPage(name: RouterPaths.home, page: () => const HomePage()),
     GetPage(name: RouterPaths.login, page: () => const LoginPage()),
     GetPage(name: RouterPaths.register, page: () => const RegisterPage()),
+    GetPage(name: RouterPaths.dashboard, page: () => const DashboardPage()),
   ];
 }

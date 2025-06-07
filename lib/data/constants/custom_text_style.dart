@@ -14,6 +14,12 @@ class CustomStyles {
   static TextStyle get buttonBlackText =>
       bodyText1.copyWith(color: AppColors.black);
 
+  static TextStyle get errorText => const TextStyle(
+    fontSize: 12,
+    color: AppColors.red,
+    fontWeight: FontWeight.bold,
+  );
+
   static BoxDecoration get whiteBoxDecoration => BoxDecoration(
     color: AppColors.white,
     borderRadius: BorderRadius.circular(10),

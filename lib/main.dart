@@ -1,11 +1,11 @@
-import 'package:bank_test_app/data/constants/custom_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:bank_test_app/routes/get_routes.dart';
 import 'package:bank_test_app/routes/router_paths.dart';
-import 'package:get/route_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:bank_test_app/data/constants/custom_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,8 +47,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// Escucha el estado del contador
-// final counter = ref.watch(counterProvider);
-// Incrementa el contador
-// ref.read(counterProvider.notifier).state++;

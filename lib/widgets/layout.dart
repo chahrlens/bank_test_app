@@ -2,8 +2,9 @@ import 'package:bank_test_app/data/constants/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class Layout extends StatelessWidget {
-  const Layout({super.key, required this.child});
+  const Layout({super.key, required this.child, required this.title});
   final Widget child;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class Layout extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.black,
-          title: const Text('Dashboard'),
+          title: Text(title),
           actionsIconTheme: IconThemeData(color: AppColors.white),
         ),
         body: Container(

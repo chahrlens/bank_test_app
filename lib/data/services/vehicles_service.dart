@@ -1,6 +1,10 @@
 import 'dart:convert';
-
+import 'package:bank_test_app/data/models/brand_model.dart';
+import 'package:bank_test_app/data/models/fuel_types_model.dart';
+import 'package:bank_test_app/data/models/line_model.dart';
+import 'package:bank_test_app/data/models/model_model.dart';
 import 'package:bank_test_app/data/models/pair.dart';
+import 'package:bank_test_app/data/models/transmissions_types_model.dart';
 import 'package:bank_test_app/data/models/vehicle_model.dart';
 import 'package:bank_test_app/data/models/web_generic_response.dart';
 import 'package:bank_test_app/providers/http_provider.dart';
@@ -30,6 +34,127 @@ class VehiclesService extends GetConnect {
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching vehicles: $e');
+      }
+      return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  Future<Pair<List<Brand>?, WebServiceResponse>> getBrands() async {
+    try {
+      final result = await _httpProvider.getApi('/catalogs/brands', null);
+      if (result.first != null) {
+        if (kDebugMode) {
+          print(result.first);
+          print(result.second);
+        }
+        Iterable list = jsonDecode(result.first);
+        final List<Brand> brands =
+            list.map((brand) => Brand.fromJson(brand)).toList();
+        return Pair(brands, result.second);
+      } else {
+        return Pair(null, result.second);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching brands: $e');
+      }
+      return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  Future<Pair<List<Model>?, WebServiceResponse>> getModels() async {
+    try {
+      final result = await _httpProvider.getApi('/catalogs/models', null);
+      if (result.first != null) {
+        if (kDebugMode) {
+          print(result.first);
+          print(result.second);
+        }
+        Iterable list = jsonDecode(result.first);
+        final List<Model> models =
+            list.map((model) => Model.fromJson(model)).toList();
+        return Pair(models, result.second);
+      } else {
+        return Pair(null, result.second);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching models: $e');
+      }
+      return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  Future<Pair<List<Line>?, WebServiceResponse>> getLines() async {
+    try {
+      final result = await _httpProvider.getApi('/catalogs/lines', null);
+      if (result.first != null) {
+        if (kDebugMode) {
+          print(result.first);
+          print(result.second);
+        }
+        Iterable list = jsonDecode(result.first);
+        final List<Line> lines =
+            list.map((line) => Line.fromJson(line)).toList();
+        return Pair(lines, result.second);
+      } else {
+        return Pair(null, result.second);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching lines: $e');
+      }
+      return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  //
+  // /fuel-types
+  Future<Pair<List<FuelTypesModel>?, WebServiceResponse>> getFuelTypes() async {
+    try {
+      final result = await _httpProvider.getApi('/catalogs/fuel-types', null);
+      if (result.first != null) {
+        if (kDebugMode) {
+          print(result.first);
+          print(result.second);
+        }
+        Iterable list = jsonDecode(result.first);
+        final List<FuelTypesModel> fuelTypes =
+            list.map((fuelType) => FuelTypesModel.fromJson(fuelType)).toList();
+        return Pair(fuelTypes, result.second);
+      } else {
+        return Pair(null, result.second);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching fuel types: $e');
+      }
+      return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  ///transmissions-type
+  Future<Pair<List<TransmissionsTypesModel>?, WebServiceResponse>>
+  getTransmissionsTypes() async {
+    try {
+      final result = await _httpProvider.getApi(
+        '/catalogs/transmissions-types',
+        null,
+      );
+      if (result.first != null) {
+        if (kDebugMode) {
+          print(result.first);
+          print(result.second);
+          Iterable list = jsonDecode(result.first);
+          final List<TransmissionsTypesModel> transmissionsTypes =
+              list.map((e) => TransmissionsTypesModel.fromJson(e)).toList();
+          return Pair(transmissionsTypes, result.second);
+        }
+      }
+      return Pair(null, result.second);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching transmissions types: $e');
       }
       return Pair(null, WebServiceResponse('1', e.toString()));
     }

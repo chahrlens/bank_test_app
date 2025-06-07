@@ -1,5 +1,6 @@
 import 'package:bank_test_app/data/constants/custom_text_style.dart';
 import 'package:bank_test_app/providers/global_providers.dart';
+import 'package:bank_test_app/routes/router_paths.dart';
 import 'package:bank_test_app/widgets/layout.dart';
 import 'package:bank_test_app/widgets/primary_action_button.dart';
 import 'package:bank_test_app/widgets/vehicle_card.dart';
@@ -43,6 +44,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      title: 'Dashboard',
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Column(
@@ -55,6 +57,13 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.toNamed(RouterPaths.vehicles);
+                },
+                label: Text('Agregar Vehículo'),
+                icon: Icon(Icons.add),
               ),
               const SizedBox(height: 20),
               Expanded(

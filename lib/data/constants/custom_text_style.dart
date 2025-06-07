@@ -1,5 +1,5 @@
 import 'package:bank_test_app/data/constants/custom_colors.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class CustomStyles {
   static TextStyle get headline1 =>
@@ -14,6 +14,9 @@ class CustomStyles {
   static TextStyle get buttonBlackText =>
       bodyText1.copyWith(color: AppColors.black);
 
+  static TextStyle get buttonWhiteText =>
+      bodyText1.copyWith(color: AppColors.white);
+
   static TextStyle get errorText => const TextStyle(
     fontSize: 12,
     color: AppColors.red,
@@ -21,7 +24,7 @@ class CustomStyles {
   );
 
   static BoxDecoration get whiteBoxDecoration => BoxDecoration(
-    color: AppColors.white,
+    color: Colors.transparent,
     borderRadius: BorderRadius.circular(10),
   );
 }

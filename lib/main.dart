@@ -8,6 +8,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:bank_test_app/data/constants/custom_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+final container = ProviderContainer();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

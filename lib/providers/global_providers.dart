@@ -10,6 +10,8 @@ class AuthNotifier extends StateNotifier<User?> {
     state = user;
   }
 
+  User? get user => state;
+
   void logout() {
     state = null;
   }
@@ -18,3 +20,5 @@ class AuthNotifier extends StateNotifier<User?> {
 final userProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
   return AuthNotifier();
 });
+
+final userProviderWithOutNotifier = userProvider.notifier;

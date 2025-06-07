@@ -1,7 +1,8 @@
+import 'package:bank_test_app/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:bank_test_app/data/models/pair.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bank_test_app/providers/global_providers.dart';
 import 'package:bank_test_app/data/models/web_generic_response.dart';
 
@@ -9,10 +10,9 @@ class HttpProvider {
   String baseUrl = dotenv.env['BASE_URL'] ?? '';
   WebServiceResponse genericResponse = WebServiceResponse('0', '');
   final List<int> statusCodes = [200, 201, 202, 204];
-  final container = ProviderContainer();
 
   Future<String?> getToken() async {
-    final user = container.read(userProvider);
+    final user = container.read(userProviderWithOutNotifier).user;
     if (user != null) {
       final token = await user.getIdToken();
       return token;
@@ -27,6 +27,12 @@ class HttpProvider {
   ) async {
     try {
       String fullHttpUrl = baseUrl + endpoint;
+      if (kDebugMode) {
+        print('GET Request URL: $fullHttpUrl');
+        if (params != null) {
+          print('GET Request Params: $params');
+        }
+      }
       final token = await getToken();
 
       final headers = {

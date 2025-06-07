@@ -1,4 +1,5 @@
 import 'package:bank_test_app/data/constants/custom_text_style.dart';
+import 'package:bank_test_app/main.dart';
 import 'package:bank_test_app/providers/global_providers.dart';
 import 'package:bank_test_app/routes/router_paths.dart';
 import 'package:bank_test_app/views/home/controllers/login_controller.dart';
@@ -33,6 +34,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       EasyLoading.dismiss();
       if (user != null) {
         ref.read(userProvider.notifier).setUser(user);
+        container.read(userProviderWithOutNotifier).setUser(user);
         Get.offAllNamed(RouterPaths.dashboard);
       } else {
         _controller.showErrors.value = true;

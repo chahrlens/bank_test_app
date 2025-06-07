@@ -1,29 +1,41 @@
 import 'package:bank_test_app/data/constants/custom_text_style.dart';
+import 'package:bank_test_app/providers/global_providers.dart';
 import 'package:bank_test_app/routes/router_paths.dart';
 import 'package:bank_test_app/views/home/controllers/register_controller.dart';
 import 'package:bank_test_app/widgets/custom_input.dart';
 import 'package:bank_test_app/widgets/home_layout.dart';
 import 'package:bank_test_app/widgets/primary_action_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends ConsumerState<RegisterPage> {
   late RegisterController _controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   void _handleSubmit() async {
+    if (isLoading) return;
     if (_formKey.currentState?.validate() ?? false) {
-      Get.snackbar('Éxito', 'Registro exitoso');
+      isLoading = true;
+      EasyLoading.show(status: "Loading...");
+      final User? user = await _controller.register();
+      EasyLoading.dismiss();
+      ref.read(userProvider.notifier).setUser(user);
+      Get.offAllNamed(RouterPaths.dashboard);
     } else {
-      Get.snackbar('Error', 'Por favor corrige los errores en el formulario');
+      EasyLoading.showError('Error al crear usuario.\nInténtalo de nuevo.');
     }
+    isLoading = false;
   }
 
   @override

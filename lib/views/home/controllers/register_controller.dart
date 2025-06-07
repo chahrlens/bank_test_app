@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterController extends GetxController {
   final TextEditingController nameController = TextEditingController();
@@ -8,6 +10,27 @@ class RegisterController extends GetxController {
 
   final RxBool showPassword = false.obs;
   final RxBool showConfirmPassword = false.obs;
+
+  Future<User?> register() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+      User? user = userCredential.user;
+      if (user != null) {
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      ('Error', e.message ?? 'Error desconocido');
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error inesperado: $e');
+      }
+    }
+    return null;
+  }
 
   String? validateName(String? value) {
     if (value == null || value.isEmpty) {

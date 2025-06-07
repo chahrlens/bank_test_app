@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginController extends GetxController {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController(text: 'carlos.ihernandez7@gmail.com');
+  final TextEditingController passwordController = TextEditingController(text: 'asdF.123');
   RxBool showPassword = false.obs;
   RxBool showErrors = false.obs;
 

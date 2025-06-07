@@ -79,40 +79,44 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         prefixIcon: Icons.email,
                       ),
                       const SizedBox(height: 16),
-                      CustomInput(
-                        controller: _controller.passwordController,
-                        label: 'Contraseña',
-                        validator: _controller.validatePassword,
-                        prefixIcon: Icons.lock,
-                        obscureText: !_controller.showPassword.value,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            _controller.showPassword.value =
-                                !_controller.showPassword.value;
-                          },
-                          icon: Icon(
-                            _controller.showPassword.value
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                      Obx(
+                        () => CustomInput(
+                          controller: _controller.passwordController,
+                          label: 'Contraseña',
+                          validator: _controller.validatePassword,
+                          prefixIcon: Icons.lock,
+                          obscureText: !_controller.showPassword.value,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _controller.showPassword.value =
+                                  !_controller.showPassword.value;
+                            },
+                            icon: Icon(
+                              _controller.showPassword.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      CustomInput(
-                        controller: _controller.passwordController,
-                        label: 'Confirmar Contraseña',
-                        validator: _controller.validateConfirmPassword,
-                        prefixIcon: Icons.lock,
-                        obscureText: !_controller.showConfirmPassword.value,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            _controller.showConfirmPassword.value =
-                                !_controller.showConfirmPassword.value;
-                          },
-                          icon: Icon(
-                            _controller.showConfirmPassword.value
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                      Obx(
+                        () => CustomInput(
+                          controller: _controller.confirmPasswordController,
+                          label: 'Confirmar Contraseña',
+                          validator: _controller.validateConfirmPassword,
+                          prefixIcon: Icons.lock,
+                          obscureText: !_controller.showConfirmPassword.value,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _controller.showConfirmPassword.value =
+                                  !_controller.showConfirmPassword.value;
+                            },
+                            icon: Icon(
+                              _controller.showConfirmPassword.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                           ),
                         ),
                       ),

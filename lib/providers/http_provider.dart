@@ -7,7 +7,7 @@ import 'package:bank_test_app/providers/global_providers.dart';
 import 'package:bank_test_app/data/models/web_generic_response.dart';
 
 class HttpProvider {
-  String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  String baseUrl = dotenv.env['API_URL'] ?? '';
   WebServiceResponse genericResponse = WebServiceResponse('0', '');
   final List<int> statusCodes = [200, 201, 202, 204];
 

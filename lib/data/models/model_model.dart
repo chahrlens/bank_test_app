@@ -1,6 +1,7 @@
+import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
 import 'package:bank_test_app/data/models/line_model.dart';
 
-class Model {
+class Model implements DropdownOption {
   int id;
   String name;
   int lineId;
@@ -30,4 +31,7 @@ class Model {
       line: json['line'] != null ? Line.fromJson(json['line']) : null,
     );
   }
+
+  @override
+  String get label => name;
 }

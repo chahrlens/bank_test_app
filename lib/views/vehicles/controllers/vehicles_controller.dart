@@ -130,14 +130,12 @@ class VehiclesController extends GetxController {
         allModels.where((model) => model.lineId == vehicle?.model?.lineId),
       );
 
+      selectedLine = vehicle?.model?.line;
       selectedBrand = selectedLine?.brand;
       selectedLine = selectedModel?.line;
       selectedModel = vehicle?.model;
-      // Set the controllers with the vehicle data
-      brandsController.text = selectedBrand?.name ?? '';
-      linesController.text = selectedLine?.name ?? '';
-      modelsController.text = selectedModel?.name ?? '';
 
+      // Set the text controllers with the vehicle data
       vimController.text = vehicle?.vim ?? '';
       colorController.text = vehicle?.color ?? '';
       engineNumberController.text = vehicle?.engineNumber ?? '';

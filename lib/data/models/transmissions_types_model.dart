@@ -1,4 +1,5 @@
-class TransmissionsTypesModel {
+import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
+class TransmissionsTypesModel implements DropdownOption {
   int id;
   String name;
 
@@ -9,4 +10,7 @@ class TransmissionsTypesModel {
       name: json['name'] as String,
     );
   }
+
+  @override
+  String get label => name;
 }

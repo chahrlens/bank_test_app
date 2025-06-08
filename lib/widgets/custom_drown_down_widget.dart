@@ -1,7 +1,8 @@
 import 'package:bank_test_app/data/constants/custom_colors.dart';
+import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
 import 'package:flutter/material.dart';
 
-class CustomDrownDownWidget<T> extends StatelessWidget {
+class CustomDrownDownWidget<T extends DropdownOption> extends StatelessWidget {
   const CustomDrownDownWidget({
     super.key,
     required this.label,
@@ -35,6 +36,7 @@ class CustomDrownDownWidget<T> extends StatelessWidget {
               if (selectedValue != null) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   state.didChange(selectedValue);
+                  controller.text = selectedValue!.label;
                 });
               }
               return Column(

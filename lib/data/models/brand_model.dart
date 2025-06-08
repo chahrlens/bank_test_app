@@ -1,4 +1,6 @@
-class Brand {
+import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
+
+class Brand implements DropdownOption {
   int id;
   String name;
   DateTime createdAt;
@@ -22,4 +24,7 @@ class Brand {
       status: json['status'] as int,
     );
   }
+
+  @override
+  String get label => name;
 }

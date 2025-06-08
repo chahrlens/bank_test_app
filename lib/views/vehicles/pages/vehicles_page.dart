@@ -31,7 +31,7 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
     EasyLoading.show(status: 'Loading...');
     final result = await _controller.fetchCatalogs();
     if (editMode) {
-      _controller.editVehicle(args['vehicle']);
+      _controller.retrieveVehicleData(args['vehicle']);
       setState(() {});
     }
     EasyLoading.dismiss();
@@ -43,19 +43,16 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
   void _handleSubmit() async {
     if (_formKey.currentState!.validate()) {
       EasyLoading.show(status: 'Loading...');
+      String result;
       if (editMode) {
-        await _controller.editVehicle(args['vehicle']);
+        result = await _controller.updateVehicle();
       } else {
-        await _controller.addVehicle();
+        result = await _controller.addVehicle();
       }
       EasyLoading.dismiss();
 
       Get.back();
-      EasyLoading.showSuccess(
-        editMode
-            ? 'Vehicle updated successfully'
-            : 'Vehicle added successfully',
-      );
+      EasyLoading.showInfo(result, duration: Duration(seconds: 3));
     } else {
       EasyLoading.showError('Please fill in all required fields');
     }
@@ -186,7 +183,7 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
                         CustomInput(
                           controller: _controller.plateNumberController,
                           label: 'Plate Number',
-                          validator: _controller.notEmptyValidator,
+                          validator: (_) => null,
                         ),
                         SizedBox(height: 16),
                         CustomInput(
@@ -239,6 +236,25 @@ class _VehiclesPageState extends ConsumerState<VehiclesPage> {
                             },
                             validator: _controller.dropdownValidator,
                           ),
+                        ),
+                        CustomDrownDownWidget<VehicleStatus>(
+                          label: 'Vehicle Status',
+                          hintText: 'Select Vehicle Status',
+                          controller: _controller.vehicleStatusController,
+                          selectedValue: _controller.selectedVehicleStatus,
+                          dropdownMenuEntries:
+                              _controller.vehicleStatuses
+                                  .map<DropdownMenuEntry<VehicleStatus>>(
+                                    (e) => DropdownMenuEntry(
+                                      value: e,
+                                      label: e.description,
+                                    ),
+                                  )
+                                  .toList(),
+                          onSelected: (VehicleStatus? value) {
+                            _controller.selectedVehicleStatus = value;
+                          },
+                          validator: _controller.dropdownValidator,
                         ),
                       ],
                     ),

@@ -67,17 +67,16 @@ class VehicleModel {
 
   Map<String, dynamic> postJson() {
     return {
-      'model_id': modelId,
-      'user_id': userId,
-      'vim': vim,
+      'plate': plateNumber,
       'color': color,
-      'engine_number': engineNumber,
+      'transmissionType': transmissionType.id,
+      'fuelType': fuelType.id,
+      'modelId': modelId,
+      'engineNumber': engineNumber,
+      'vim': vim,
       'mileage': mileage,
-      'plate_number': plateNumber,
-      'fuel_type': fuelType,
-      'transmission_type': transmissionType,
-      'registration_date': registrationDate.toIso8601String(),
-      'image_url': imageUrl,
+      'registrationDate': registrationDate.toIso8601String(),
+      'imageUrl': imageUrl,
       'description': description,
     };
   }
@@ -85,17 +84,16 @@ class VehicleModel {
   Map<String, dynamic> putJson() {
     return {
       'id': id,
-      'model_id': modelId,
-      'user_id': userId,
-      'vim': vim,
+      'plate': plateNumber,
       'color': color,
-      'engine_number': engineNumber,
+      'transmissionType': transmissionType.id,
+      'fuelType': fuelType.id,
+      'modelId': modelId,
+      'engineNumber': engineNumber,
+      'vim': vim,
       'mileage': mileage,
-      'plate_number': plateNumber,
-      'fuel_type': fuelType,
-      'transmission_type': transmissionType,
-      'registration_date': registrationDate.toIso8601String(),
-      'image_url': imageUrl,
+      'registrationDate': registrationDate.toIso8601String(),
+      'imageUrl': imageUrl,
       'description': description,
     };
   }

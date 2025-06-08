@@ -156,4 +156,21 @@ class VehiclesService extends GetConnect {
       return WebServiceResponse('1', e.toString());
     }
   }
+
+  Future<WebServiceResponse> updateVehicle(VehicleModel vehicle) async {
+    try {
+      final body = jsonEncode(vehicle.putJson());
+      final response = await _httpProvider.putApi('/catalogs/vehicles', body);
+      if (response.second != null) {
+        return response.second!;
+      } else {
+        return WebServiceResponse('0', 'Vehicle updated successfully');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error updating vehicle: $e');
+      }
+      return WebServiceResponse('1', e.toString());
+    }
+  }
 }

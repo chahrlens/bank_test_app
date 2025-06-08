@@ -77,7 +77,7 @@ class HttpProvider {
 
   Future<Pair<dynamic, WebServiceResponse>> postApi(
     String endpoint,
-    String? params,
+    Object body,
   ) async {
     try {
       String fullHttpUrl = baseUrl + endpoint;
@@ -91,7 +91,7 @@ class HttpProvider {
 
       final response = await http.post(
         Uri.parse(fullHttpUrl),
-        body: params,
+        body: body,
         headers: headers,
       );
 
@@ -99,12 +99,14 @@ class HttpProvider {
         if (response.body.isNotEmpty) {
           if (kDebugMode) {
             print('✅ POST Request URL: $fullHttpUrl');
+            print('📦 POST Body: $body');
             print('📦 POST Response: ${response.body}');
           }
           return Pair(response.body, genericResponse);
         } else {
           if (kDebugMode) {
             print('✅ POST Request URL: $fullHttpUrl');
+            print('📦 POST Body: $body');
             print('⚠️ POST Response: No content');
           }
           return Pair(null, genericResponse);
@@ -112,6 +114,7 @@ class HttpProvider {
       } else {
         if (kDebugMode) {
           print('❌ POST Request URL: $fullHttpUrl');
+          print('📦 POST Body: $body');
           print(
             '🚨 POST Response Error: ${response.statusCode} - ${response.reasonPhrase}',
           );
@@ -131,7 +134,7 @@ class HttpProvider {
 
   Future<Pair<dynamic, WebServiceResponse>> putApi(
     String endpoint,
-    String? params,
+    Object body,
   ) async {
     try {
       String fullHttpUrl = baseUrl + endpoint;
@@ -145,7 +148,7 @@ class HttpProvider {
 
       final response = await http.put(
         Uri.parse(fullHttpUrl),
-        body: params,
+        body: body,
         headers: headers,
       );
 
@@ -153,12 +156,14 @@ class HttpProvider {
         if (response.body.isNotEmpty) {
           if (kDebugMode) {
             print('✅ PUT Request URL: $fullHttpUrl');
+            print('📦 PUT Body: $body');
             print('📦 PUT Response: ${response.body}');
           }
           return Pair(response.body, genericResponse);
         } else {
           if (kDebugMode) {
             print('✅ PUT Request URL: $fullHttpUrl');
+            print('📦 POST Body: $body');
             print('⚠️ PUT Response: No content');
           }
           return Pair(null, genericResponse);
@@ -166,6 +171,7 @@ class HttpProvider {
       } else {
         if (kDebugMode) {
           print('❌ PUT Request URL: $fullHttpUrl');
+          print('📦 POST Body: $body');
           print(
             '🚨 PUT Response Error: ${response.statusCode} - ${response.reasonPhrase}',
           );

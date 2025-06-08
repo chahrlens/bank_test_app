@@ -1,3 +1,4 @@
+import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
 import 'package:bank_test_app/data/models/brand_model.dart';
 import 'package:bank_test_app/data/models/fuel_types_model.dart';
 import 'package:bank_test_app/data/models/line_model.dart';
@@ -18,6 +19,13 @@ class VehiclesController extends GetxController {
   RxList<Model> selectedModels = <Model>[].obs;
   RxList<Line> selectedLines = <Line>[].obs;
 
+  List<VehicleStatus> vehicleStatuses = [
+    VehicleStatus(1, 'Available'),
+    VehicleStatus(2, 'Sold'),
+    VehicleStatus(3, 'In Service'),
+    VehicleStatus(4, 'Damaged'),
+  ];
+
   RxList<TransmissionsTypesModel> transmissionTypes =
       <TransmissionsTypesModel>[].obs;
   RxList<FuelTypesModel> fuelTypes = <FuelTypesModel>[].obs;
@@ -29,6 +37,7 @@ class VehiclesController extends GetxController {
   FuelTypesModel? selectedFuelType;
 
   VehicleModel? vehicle;
+  VehicleStatus? selectedVehicleStatus;
 
   TextEditingController vimController = TextEditingController();
   TextEditingController colorController = TextEditingController();
@@ -43,8 +52,8 @@ class VehiclesController extends GetxController {
   TextEditingController linesController = TextEditingController();
   TextEditingController transmissionTypesController = TextEditingController();
   TextEditingController fuelTypesController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController vehicleStatusController = TextEditingController();
 
   @override
   void onClose() {
@@ -109,11 +118,7 @@ class VehiclesController extends GetxController {
     }
   }
 
-  Future<void> addVehicle() async {
-    print('Adding vehicle with VIM: ${vimController.text}');
-  }
-
-  Future<void> editVehicle(dynamic data) async {
+  void retrieveVehicleData(dynamic data) {
     if (data is VehicleModel) {
       if (kDebugMode) {
         print('Editing vehicle with VIM: ${vehicle?.vim}');
@@ -132,8 +137,8 @@ class VehiclesController extends GetxController {
 
       selectedLine = vehicle?.model?.line;
       selectedBrand = selectedLine?.brand;
-      selectedLine = selectedModel?.line;
       selectedModel = vehicle?.model;
+      selectedLine = selectedModel?.line;
 
       // Set the text controllers with the vehicle data
       vimController.text = vehicle?.vim ?? '';
@@ -149,7 +154,55 @@ class VehiclesController extends GetxController {
       // Set the selected values for dropdowns
       selectedTransmissionType = vehicle?.transmissionType;
       selectedFuelType = vehicle?.fuelType;
+      selectedVehicleStatus = vehicleStatuses.firstWhereOrNull(
+        (st) => st.id == vehicle?.status,
+      );
     }
+  }
+
+  Future<String> updateVehicle() async {
+    if (vehicle == null) {
+      return 'No vehicle data to update';
+    }
+    final result = await _vehiclesService.updateVehicle(vehicle!);
+    return result.message;
+  }
+
+  Future<String> addVehicle() async {
+    if (selectedModel == null) {
+      return 'Please select a model';
+    }
+    if (selectedTransmissionType == null) {
+      return 'Please select a transmission type';
+    }
+    if (selectedFuelType == null) {
+      return 'Please select a fuel type';
+    }
+    if (selectedModel == null) {
+      return 'Please select a model';
+    }
+
+    final newVehicle = VehicleModel(
+      id: 0,
+      vim: vimController.text,
+      color: colorController.text,
+      modelId: selectedModel!.id,
+      engineNumber: engineNumberController.text,
+      plateNumber: plateNumberController.text,
+      fuelType: selectedFuelType!,
+      transmissionType: selectedTransmissionType!,
+      mileage: int.tryParse(mileageController.text) ?? 0,
+      registrationDate: DateTime.parse(registrationDateController.text),
+      model: selectedModel!,
+      status: selectedVehicleStatus?.id ?? 1, // Default to 'Available'
+      updatedAt: DateTime.now(),
+      createdAt: DateTime.now(),
+      userId: 0,
+      description: descriptionController.text,
+    );
+
+    final result = await _vehiclesService.addVehicle(newVehicle);
+    return result.message;
   }
 
   String? notEmptyValidator(String? value) {
@@ -165,4 +218,14 @@ class VehiclesController extends GetxController {
     }
     return null;
   }
+}
+
+class VehicleStatus implements DropdownOption {
+  int id;
+  String description;
+
+  VehicleStatus(this.id, this.description);
+
+  @override
+  String get label => description;
 }

@@ -1,5 +1,7 @@
 import 'package:bank_test_app/data/models/vehicle_model.dart';
+import 'package:bank_test_app/routes/router_paths.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class VehicleCard extends StatelessWidget {
   final VehicleModel vehicle;
@@ -27,12 +29,26 @@ class VehicleCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
-                  vehicle.status == 1 ? 'Activo' : 'Inactivo',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: vehicle.status == 1 ? Colors.green : Colors.red,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      vehicle.status == 1 ? 'Activo' : 'Inactivo',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: vehicle.status == 1 ? Colors.green : Colors.red,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Get.toNamed(
+                          RouterPaths.vehicles,
+                          arguments: {'vehicle': vehicle},
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -51,13 +67,13 @@ class VehicleCard extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              'Tipo de combustible: ${vehicle.fuelType ?? 'No especificado'}',
+              'Tipo de combustible: ${vehicle.fuelType.name}',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 8),
 
             Text(
-              'Transmisión: ${vehicle.transmissionType ?? 'No especificado'}',
+              'Transmisión: ${vehicle.transmissionType.name}',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 8),
@@ -74,7 +90,6 @@ class VehicleCard extends StatelessWidget {
               )[0],
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
-
             // Optional image
             if (vehicle.imageUrl != null && vehicle.imageUrl!.isNotEmpty)
               Padding(

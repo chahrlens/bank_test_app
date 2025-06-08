@@ -27,11 +27,8 @@ class HttpProvider {
   ) async {
     try {
       String fullHttpUrl = baseUrl + endpoint;
-      if (kDebugMode) {
-        print('GET Request URL: $fullHttpUrl');
-        if (params != null) {
-          print('GET Request Params: $params');
-        }
+      if (params != null && params.isNotEmpty) {
+        fullHttpUrl += '?$params';
       }
       final token = await getToken();
 
@@ -41,18 +38,30 @@ class HttpProvider {
         'Authorization': 'Bearer $token',
       };
 
-      final response = await http.get(
-        Uri.parse(fullHttpUrl + (params != null ? '?$params' : '')),
-        headers: headers,
-      );
+      final response = await http.get(Uri.parse(fullHttpUrl), headers: headers);
 
       if (statusCodes.contains(response.statusCode)) {
         if (response.body.isNotEmpty) {
+          if (kDebugMode) {
+            print('--------------------------------------------------------');
+            print('✅ GET Request URL: $fullHttpUrl');
+            print('📦 GET Response: ${response.body}');
+          }
           return Pair(response.body, genericResponse);
         } else {
+          if (kDebugMode) {
+            print('✅ GET Request URL: $fullHttpUrl');
+            print('⚠️ GET Response: No content');
+          }
           return Pair(null, genericResponse);
         }
       } else {
+        if (kDebugMode) {
+          print('❌ GET Request URL: $fullHttpUrl');
+          print(
+            '🚨 GET Response Error: ${response.statusCode} - ${response.reasonPhrase}',
+          );
+        }
         return Pair(
           null,
           WebServiceResponse(
@@ -85,13 +94,28 @@ class HttpProvider {
         body: params,
         headers: headers,
       );
+
       if (statusCodes.contains(response.statusCode)) {
         if (response.body.isNotEmpty) {
+          if (kDebugMode) {
+            print('✅ POST Request URL: $fullHttpUrl');
+            print('📦 POST Response: ${response.body}');
+          }
           return Pair(response.body, genericResponse);
         } else {
+          if (kDebugMode) {
+            print('✅ POST Request URL: $fullHttpUrl');
+            print('⚠️ POST Response: No content');
+          }
           return Pair(null, genericResponse);
         }
       } else {
+        if (kDebugMode) {
+          print('❌ POST Request URL: $fullHttpUrl');
+          print(
+            '🚨 POST Response Error: ${response.statusCode} - ${response.reasonPhrase}',
+          );
+        }
         return Pair(
           null,
           WebServiceResponse(
@@ -127,11 +151,25 @@ class HttpProvider {
 
       if (statusCodes.contains(response.statusCode)) {
         if (response.body.isNotEmpty) {
+          if (kDebugMode) {
+            print('✅ PUT Request URL: $fullHttpUrl');
+            print('📦 PUT Response: ${response.body}');
+          }
           return Pair(response.body, genericResponse);
         } else {
+          if (kDebugMode) {
+            print('✅ PUT Request URL: $fullHttpUrl');
+            print('⚠️ PUT Response: No content');
+          }
           return Pair(null, genericResponse);
         }
       } else {
+        if (kDebugMode) {
+          print('❌ PUT Request URL: $fullHttpUrl');
+          print(
+            '🚨 PUT Response Error: ${response.statusCode} - ${response.reasonPhrase}',
+          );
+        }
         return Pair(
           null,
           WebServiceResponse(
@@ -166,11 +204,25 @@ class HttpProvider {
 
       if (statusCodes.contains(response.statusCode)) {
         if (response.body.isNotEmpty) {
+          if (kDebugMode) {
+            print('✅ DELETE Request URL: $fullHttpUrl');
+            print('📦 DELETE Response: ${response.body}');
+          }
           return Pair(response.body, genericResponse);
         } else {
+          if (kDebugMode) {
+            print('✅ DELETE Request URL: $fullHttpUrl');
+            print('⚠️ DELETE Response: No content');
+          }
           return Pair(null, genericResponse);
         }
       } else {
+        if (kDebugMode) {
+          print('❌ DELETE Request URL: $fullHttpUrl');
+          print(
+            '🚨 DELETE Response Error: ${response.statusCode} - ${response.reasonPhrase}',
+          );
+        }
         return Pair(
           null,
           WebServiceResponse(

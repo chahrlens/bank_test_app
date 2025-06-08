@@ -43,10 +43,6 @@ class VehiclesService extends GetConnect {
     try {
       final result = await _httpProvider.getApi('/catalogs/brands', null);
       if (result.first != null) {
-        if (kDebugMode) {
-          print(result.first);
-          print(result.second);
-        }
         Iterable list = jsonDecode(result.first);
         final List<Brand> brands =
             list.map((brand) => Brand.fromJson(brand)).toList();
@@ -66,10 +62,6 @@ class VehiclesService extends GetConnect {
     try {
       final result = await _httpProvider.getApi('/catalogs/models', null);
       if (result.first != null) {
-        if (kDebugMode) {
-          print(result.first);
-          print(result.second);
-        }
         Iterable list = jsonDecode(result.first);
         final List<Model> models =
             list.map((model) => Model.fromJson(model)).toList();
@@ -89,10 +81,6 @@ class VehiclesService extends GetConnect {
     try {
       final result = await _httpProvider.getApi('/catalogs/lines', null);
       if (result.first != null) {
-        if (kDebugMode) {
-          print(result.first);
-          print(result.second);
-        }
         Iterable list = jsonDecode(result.first);
         final List<Line> lines =
             list.map((line) => Line.fromJson(line)).toList();
@@ -114,10 +102,6 @@ class VehiclesService extends GetConnect {
     try {
       final result = await _httpProvider.getApi('/catalogs/fuel-types', null);
       if (result.first != null) {
-        if (kDebugMode) {
-          print(result.first);
-          print(result.second);
-        }
         Iterable list = jsonDecode(result.first);
         final List<FuelTypesModel> fuelTypes =
             list.map((fuelType) => FuelTypesModel.fromJson(fuelType)).toList();
@@ -142,14 +126,10 @@ class VehiclesService extends GetConnect {
         null,
       );
       if (result.first != null) {
-        if (kDebugMode) {
-          print(result.first);
-          print(result.second);
-          Iterable list = jsonDecode(result.first);
-          final List<TransmissionsTypesModel> transmissionsTypes =
-              list.map((e) => TransmissionsTypesModel.fromJson(e)).toList();
-          return Pair(transmissionsTypes, result.second);
-        }
+        Iterable list = jsonDecode(result.first);
+        final List<TransmissionsTypesModel> transmissionsTypes =
+            list.map((e) => TransmissionsTypesModel.fromJson(e)).toList();
+        return Pair(transmissionsTypes, result.second);
       }
       return Pair(null, result.second);
     } catch (e) {
@@ -157,6 +137,23 @@ class VehiclesService extends GetConnect {
         print('Error fetching transmissions types: $e');
       }
       return Pair(null, WebServiceResponse('1', e.toString()));
+    }
+  }
+
+  Future<WebServiceResponse> addVehicle(VehicleModel vehicle) async {
+    try {
+      final body = jsonEncode(vehicle.postJson());
+      final response = await _httpProvider.postApi('/catalogs/vehicles', body);
+      if (response.second != null) {
+        return response.second!;
+      } else {
+        return WebServiceResponse('0', 'Vehicle added successfully');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error adding vehicle: $e');
+      }
+      return WebServiceResponse('1', e.toString());
     }
   }
 }

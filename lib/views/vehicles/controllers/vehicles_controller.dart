@@ -3,15 +3,21 @@ import 'package:bank_test_app/data/models/fuel_types_model.dart';
 import 'package:bank_test_app/data/models/line_model.dart';
 import 'package:bank_test_app/data/models/model_model.dart';
 import 'package:bank_test_app/data/models/transmissions_types_model.dart';
+import 'package:bank_test_app/data/models/vehicle_model.dart';
 import 'package:bank_test_app/data/services/vehicles_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class VehiclesController extends GetxController {
   final VehiclesService _vehiclesService = VehiclesService();
   RxList<Brand> brands = <Brand>[].obs;
-  RxList<Model> models = <Model>[].obs;
-  RxList<Line> lines = <Line>[].obs;
+
+  List<Model> allModels = <Model>[];
+  List<Line> allLines = <Line>[];
+  RxList<Model> selectedModels = <Model>[].obs;
+  RxList<Line> selectedLines = <Line>[].obs;
+
   RxList<TransmissionsTypesModel> transmissionTypes =
       <TransmissionsTypesModel>[].obs;
   RxList<FuelTypesModel> fuelTypes = <FuelTypesModel>[].obs;
@@ -21,6 +27,8 @@ class VehiclesController extends GetxController {
   Line? selectedLine;
   TransmissionsTypesModel? selectedTransmissionType;
   FuelTypesModel? selectedFuelType;
+
+  VehicleModel? vehicle;
 
   TextEditingController vimController = TextEditingController();
   TextEditingController colorController = TextEditingController();
@@ -51,7 +59,7 @@ class VehiclesController extends GetxController {
     super.onClose();
   }
 
-  Future<void> fetchCatalogs() async {
+  Future<String?> fetchCatalogs() async {
     try {
       final results = await Future.wait([
         _vehiclesService.getBrands(),
@@ -62,31 +70,99 @@ class VehiclesController extends GetxController {
       ]);
       final test = results.every((t) => t.first != null);
       if (test) {
-        brands.assign(results[0].first! as Brand);
-        models.assign(results[1].first! as Model);
-        lines.assign(results[2].first! as Line);
-        transmissionTypes.assign(results[3].first! as TransmissionsTypesModel);
-        fuelTypes.assign(results[4].first! as FuelTypesModel);
+        brands.assignAll(results[0].first! as List<Brand>);
+        allModels.assignAll(results[1].first! as List<Model>);
+        allLines.assignAll(results[2].first! as List<Line>);
+        transmissionTypes.assignAll(
+          results[3].first! as List<TransmissionsTypesModel>,
+        );
+        fuelTypes.assignAll(results[4].first! as List<FuelTypesModel>);
       }
+      return null;
     } catch (e) {
-      Get.snackbar('Error', 'An error occurred while fetching catalogs: $e');
+      return e.toString();
+    }
+  }
+
+  void onBrandSelected(Brand? brand) {
+    selectedLines.clear();
+    selectedModels.clear();
+    selectedModel = null;
+    selectedLine = null;
+    selectedTransmissionType = null;
+    selectedFuelType = null;
+
+    selectedBrand = brand;
+    if (brand != null) {
+      selectedLines.assignAll(
+        allLines.where((line) => line.brandId == brand.id),
+      );
+    }
+  }
+
+  void onSelectedLine(Line? line) {
+    selectedLine = line;
+    if (line != null) {
+      selectedModels.assignAll(
+        allModels.where((model) => model.lineId == line.id),
+      );
     }
   }
 
   Future<void> addVehicle() async {
-    // Aquí puedes implementar la lógica para agregar un vehículo
-    // Por ejemplo, enviar los datos a una API o guardarlos localmente
     print('Adding vehicle with VIM: ${vimController.text}');
   }
 
-  Future<void> editVehicle(int vehicleId) async {
-    // Aquí puedes implementar la lógica para editar un vehículo existente
-    // Por ejemplo, enviar los datos actualizados a una API o guardarlos localmente
-    print('Editing vehicle with ID: $vehicleId and VIM: ${vimController.text}');
+  Future<void> editVehicle(dynamic data) async {
+    if (data is VehicleModel) {
+      if (kDebugMode) {
+        print('Editing vehicle with VIM: ${vehicle?.vim}');
+      }
+      vehicle = data;
+      selectedModels.assignAll(
+        allModels.where((model) => model.lineId == vehicle?.model?.lineId),
+      );
+      selectedLines.assignAll(
+        allLines.where((line) => line.brandId == vehicle?.model?.line?.brandId),
+      );
+
+      selectedModels.assignAll(
+        allModels.where((model) => model.lineId == vehicle?.model?.lineId),
+      );
+
+      selectedBrand = selectedLine?.brand;
+      selectedLine = selectedModel?.line;
+      selectedModel = vehicle?.model;
+      // Set the controllers with the vehicle data
+      brandsController.text = selectedBrand?.name ?? '';
+      linesController.text = selectedLine?.name ?? '';
+      modelsController.text = selectedModel?.name ?? '';
+
+      vimController.text = vehicle?.vim ?? '';
+      colorController.text = vehicle?.color ?? '';
+      engineNumberController.text = vehicle?.engineNumber ?? '';
+      plateNumberController.text = vehicle?.plateNumber ?? '';
+      mileageController.text = vehicle?.mileage.toString() ?? '';
+      registrationDateController.text =
+          vehicle?.registrationDate.toIso8601String() ?? '';
+      descriptionController.text = vehicle?.description ?? '';
+      selectedTransmissionType = vehicle?.transmissionType;
+      selectedFuelType = vehicle?.fuelType;
+      // Set the selected values for dropdowns
+      selectedTransmissionType = vehicle?.transmissionType;
+      selectedFuelType = vehicle?.fuelType;
+    }
   }
 
   String? notEmptyValidator(String? value) {
     if (value == null || value.isEmpty) {
+      return 'This field cannot be empty';
+    }
+    return null;
+  }
+
+  String? dropdownValidator(dynamic value) {
+    if (value == null) {
       return 'This field cannot be empty';
     }
     return null;

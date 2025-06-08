@@ -1,4 +1,6 @@
+import 'package:bank_test_app/data/models/fuel_types_model.dart';
 import 'package:bank_test_app/data/models/model_model.dart';
+import 'package:bank_test_app/data/models/transmissions_types_model.dart';
 
 class VehicleModel {
   int id;
@@ -10,8 +12,8 @@ class VehicleModel {
   int mileage;
   DateTime createdAt;
   String? plateNumber;
-  String? fuelType;
-  String? transmissionType;
+  FuelTypesModel fuelType;
+  TransmissionsTypesModel transmissionType;
   DateTime registrationDate;
   String? imageUrl;
   String? description;
@@ -29,8 +31,8 @@ class VehicleModel {
     required this.mileage,
     required this.createdAt,
     this.plateNumber,
-    this.fuelType,
-    this.transmissionType,
+    required this.fuelType,
+    required this.transmissionType,
     required this.registrationDate,
     this.imageUrl,
     this.description,
@@ -50,8 +52,10 @@ class VehicleModel {
       mileage: json['mileage'] as int,
       createdAt: DateTime.parse(json['created_at'] as String),
       plateNumber: json['plate_number'] as String?,
-      fuelType: json['fuel_type'] as String?,
-      transmissionType: json['transmission_type'] as String?,
+      fuelType: FuelTypesModel.fromJson(json['fuel_type']),
+      transmissionType: TransmissionsTypesModel.fromJson(
+        json['transmission_type'],
+      ),
       registrationDate: DateTime.parse(json['registration_date'] as String),
       imageUrl: json['image_url'] as String?,
       description: json['description'] as String?,
@@ -59,5 +63,40 @@ class VehicleModel {
       status: json['status'] as int,
       model: json['model'] != null ? Model.fromJson(json['model']) : null,
     );
+  }
+
+  Map<String, dynamic> postJson() {
+    return {
+      'model_id': modelId,
+      'user_id': userId,
+      'vim': vim,
+      'color': color,
+      'engine_number': engineNumber,
+      'mileage': mileage,
+      'plate_number': plateNumber,
+      'fuel_type': fuelType,
+      'transmission_type': transmissionType,
+      'registration_date': registrationDate.toIso8601String(),
+      'image_url': imageUrl,
+      'description': description,
+    };
+  }
+
+  Map<String, dynamic> putJson() {
+    return {
+      'id': id,
+      'model_id': modelId,
+      'user_id': userId,
+      'vim': vim,
+      'color': color,
+      'engine_number': engineNumber,
+      'mileage': mileage,
+      'plate_number': plateNumber,
+      'fuel_type': fuelType,
+      'transmission_type': transmissionType,
+      'registration_date': registrationDate.toIso8601String(),
+      'image_url': imageUrl,
+      'description': description,
+    };
   }
 }

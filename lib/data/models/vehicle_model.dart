@@ -17,7 +17,7 @@ class VehicleModel {
   DateTime registrationDate;
   String? imageUrl;
   String? description;
-  DateTime updatedAt;
+  DateTime? updatedAt;
   int status;
   Model? model;
 
@@ -36,7 +36,7 @@ class VehicleModel {
     required this.registrationDate,
     this.imageUrl,
     this.description,
-    required this.updatedAt,
+    this.updatedAt,
     required this.status,
     this.model,
   });
@@ -59,7 +59,10 @@ class VehicleModel {
       registrationDate: DateTime.parse(json['registration_date'] as String),
       imageUrl: json['image_url'] as String?,
       description: json['description'] as String?,
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.tryParse(json['updated_at'] as String)
+              : null,
       status: json['status'] as int,
       model: json['model'] != null ? Model.fromJson(json['model']) : null,
     );
@@ -78,6 +81,7 @@ class VehicleModel {
       'registrationDate': registrationDate.toIso8601String(),
       'imageUrl': imageUrl,
       'description': description,
+      'userId': userId,
     };
   }
 
@@ -96,5 +100,43 @@ class VehicleModel {
       'imageUrl': imageUrl,
       'description': description,
     };
+  }
+
+  factory VehicleModel.copyFrom({
+    required VehicleModel father,
+    String? plate,
+    String? color,
+    TransmissionsTypesModel? transmissionType,
+    FuelTypesModel? fuelType,
+    int? modelId,
+    String? engineNumber,
+    String? vim,
+    int? mileage,
+    DateTime? registrationDate,
+    String? imageUrl,
+    String? description,
+    Model? model,
+    int? status,
+    int? userId,
+  }) {
+    return VehicleModel(
+      id: father.id,
+      modelId: modelId ?? father.modelId,
+      vim: vim ?? father.vim,
+      color: color ?? father.color,
+      engineNumber: engineNumber ?? father.engineNumber,
+      mileage: mileage ?? father.mileage,
+      createdAt: father.createdAt,
+      plateNumber: plate ?? father.plateNumber,
+      fuelType: fuelType ?? father.fuelType,
+      transmissionType: transmissionType ?? father.transmissionType,
+      registrationDate: registrationDate ?? father.registrationDate,
+      imageUrl: imageUrl ?? father.imageUrl,
+      description: description ?? father.description,
+      updatedAt: DateTime.now(),
+      status: status ?? father.status,
+      model: model ?? father.model,
+      userId: userId ?? father.userId,
+    );
   }
 }

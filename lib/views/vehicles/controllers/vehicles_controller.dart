@@ -160,11 +160,44 @@ class VehiclesController extends GetxController {
     }
   }
 
+  dynamic getValueFiltered(dynamic value) {
+    if (value.toString().isEmpty) {
+      return null;
+    }
+    return value;
+  }
+
   Future<String> updateVehicle() async {
     if (vehicle == null) {
       return 'No vehicle data to update';
     }
-    final result = await _vehiclesService.updateVehicle(vehicle!);
+    if (selectedModel == null) {
+      return 'Please select a model';
+    }
+    if (selectedTransmissionType == null) {
+      return 'Please select a transmission type';
+    }
+    if (selectedFuelType == null) {
+      return 'Please select a fuel type';
+    }
+    final VehicleModel newVehicle = VehicleModel.copyFrom(
+      father: vehicle!,
+      vim: getValueFiltered(vimController.text),
+      color: getValueFiltered(colorController.text),
+      modelId: selectedModel!.id,
+      engineNumber: getValueFiltered(engineNumberController.text),
+      plate: getValueFiltered(plateNumberController.text),
+      fuelType: selectedFuelType!,
+      transmissionType: selectedTransmissionType!,
+      mileage: int.tryParse(mileageController.text) ?? 0,
+      registrationDate: DateTime.parse(registrationDateController.text),
+      model: selectedModel!,
+      status: selectedVehicleStatus?.id ?? 1,
+      userId: vehicle!.userId,
+      description: getValueFiltered(descriptionController.text),
+    );
+
+    final result = await _vehiclesService.updateVehicle(newVehicle);
     return result.message;
   }
 
@@ -197,7 +230,7 @@ class VehiclesController extends GetxController {
       status: selectedVehicleStatus?.id ?? 1, // Default to 'Available'
       updatedAt: DateTime.now(),
       createdAt: DateTime.now(),
-      userId: 0,
+      userId: 1,
       description: descriptionController.text,
     );
 

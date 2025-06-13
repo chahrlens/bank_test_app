@@ -1,4 +1,5 @@
 import 'package:bank_test_app/data/constants/custom_text_style.dart';
+import 'package:bank_test_app/main.dart';
 import 'package:bank_test_app/providers/global_providers.dart';
 import 'package:bank_test_app/routes/router_paths.dart';
 import 'package:bank_test_app/widgets/layout.dart';
@@ -17,7 +18,7 @@ class DashboardPage extends ConsumerStatefulWidget {
   ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends ConsumerState<DashboardPage> {
+class _DashboardPageState extends ConsumerState<DashboardPage> with RouteAware {
   late DashboardController _controller;
 
   void _start() async {
@@ -39,6 +40,30 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     super.initState();
     _controller = Get.put(DashboardController());
     _start();
+  }
+
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    _start();
+  }
+
+  @override
+  void didPush() {
+    super.didPush();
+    _start();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
   }
 
   @override

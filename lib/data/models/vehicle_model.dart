@@ -99,6 +99,8 @@ class VehicleModel {
       'registrationDate': registrationDate.toIso8601String(),
       'imageUrl': imageUrl,
       'description': description,
+      'userId': userId,
+      'statusId': status,
     };
   }
 

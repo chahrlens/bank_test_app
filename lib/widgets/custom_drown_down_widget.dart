@@ -2,8 +2,9 @@ import 'package:bank_test_app/data/constants/custom_colors.dart';
 import 'package:bank_test_app/data/models/abstract/drop_down_option.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomDrownDownWidget<T extends DropdownOption> extends StatelessWidget {
-  const CustomDrownDownWidget({
+  CustomDrownDownWidget({
     super.key,
     required this.label,
     required this.hintText,
@@ -21,6 +22,7 @@ class CustomDrownDownWidget<T extends DropdownOption> extends StatelessWidget {
   final void Function(T?)? onSelected;
   final String? Function(T?)? validator;
   final T? selectedValue;
+  bool firstState = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,9 @@ class CustomDrownDownWidget<T extends DropdownOption> extends StatelessWidget {
             validator: validator,
 
             builder: (FormFieldState<T> state) {
-              if (selectedValue != null) {
+              if (selectedValue != null && firstState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
+                  firstState = false;
                   state.didChange(selectedValue);
                   controller.text = selectedValue!.label;
                 });

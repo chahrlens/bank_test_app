@@ -9,6 +9,7 @@ import 'package:bank_test_app/data/constants/custom_colors.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final container = ProviderContainer();
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<PageRoute>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return FlutterEasyLoading(child: child);
       },
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         primarySwatch: Colors.green,
         primaryColor: AppColors.darkGreen,

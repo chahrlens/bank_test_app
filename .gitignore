@@ -66,6 +66,6 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-.env
+# .env
 
-google-services.json
+# google-services.json
